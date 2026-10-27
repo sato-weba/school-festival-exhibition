@@ -1,0 +1,46 @@
+{
+  "entries": [
+    {
+      "id": "stock-01",
+      "filename": "top1.jpg",
+      "description": "手首に触れる手",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "stock-02",
+      "filename": "top2.jpg",
+      "description": "ストローの入った白い飲み物",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "stock-03",
+      "filename": "top3.jpg",
+      "description": "草原で草を食む羊",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "stock-04",
+      "filename": "top4.jpg",
+      "description": "段ボール箱の中の猫",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "stock-05",
+      "filename": "top5.jpg",
+      "description": "山の端に沈む夕日",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "stock-06",
+      "filename": "top6.jpg",
+      "description": "ソファに座る茶色い犬",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "stock-07",
+      "filename": "top7.jpg",
+      "description": "花の前の小さな雪だるま",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ]
+}

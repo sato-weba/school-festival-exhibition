@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>予期せぬ一枚</title>
+  <meta name="description" content="画像と説明を送ると、だれかのいちばん近い一枚が返ってくる文化祭体験。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="opening" class="opening is-spinning" aria-hidden="true">
+    <div class="opening-blue"></div>
+    <div class="opening-white"></div>
+    <div class="opening-stage">
+      <div class="opening-center">
+        <svg width="81" height="81" viewBox="0 0 81 81" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M79.5 40.5C79.5 62.0391 62.0391 79.5 40.5 79.5C18.9609 79.5 1.5 62.0391 1.5 40.5C1.5 18.9609 18.9609 1.5 40.5 1.5C62.0391 1.5 79.5 18.9609 79.5 40.5Z" stroke="#FFFFFF" stroke-width="3"/>
+          <path d="M74.4265 40.5C74.4265 59.2371 59.2371 74.4265 40.5 74.4265C21.7629 74.4265 6.57353 59.2371 6.57353 40.5C6.57353 21.7629 21.7629 6.57353 40.5 6.57353C59.2371 6.57353 74.4265 21.7629 74.4265 40.5Z" stroke="#8FABFF" stroke-width="6"/>
+        </svg>
+      </div>
+      <div class="opening-rotor">
+        <div class="opening-sat opening-sat--blue">
+          <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M66.5 34C66.5 51.9493 51.9493 66.5 34 66.5C16.0507 66.5 1.5 51.9493 1.5 34C1.5 16.0507 16.0507 1.5 34 1.5C51.9493 1.5 66.5 16.0507 66.5 34Z" stroke="#FFFFFF" stroke-width="3"/>
+            <path d="M62 34C62 49.464 49.464 62 34 62C18.536 62 6 49.464 6 34C6 18.536 18.536 6 34 6C49.464 6 62 18.536 62 34Z" stroke="#295EFF" stroke-width="6"/>
+          </svg>
+          <span class="opening-sat-fill"></span>
+          <div class="sat-eyes" aria-hidden="true">
+            <svg class="sat-eye sat-eye--a" viewBox="0 0 26.544 34.906" aria-hidden="true">
+              <path fill="#fff" d="M0.640383 16.2024C-0.311275 31.0482 8.41226 34.5218 12.893 34.4028C17.453 33.7684 26.6446 34.4028 25.9783 16.6782C25.5937 6.44787 19.4357 0.500014 13.9636 0.5C9.79935 0.499989 1.59204 1.35649 0.640383 16.2024Z"/>
+              <g class="sat-eye-features">
+                <path class="sat-eye-line" d="M0.003 16.655L26.541 16.745" stroke="#000" stroke-width="2"/>
+                <path class="sat-eye-pupil" fill="#000" d="M18.8878 19.0077C18.8878 22.4514 17.4603 25.243 14.0106 25.243C10.5608 25.243 9.13331 22.4514 9.13331 19.0077C9.13331 16.4402 9.13331 16.4402 14.0106 16.4402C18.8878 16.4402 18.8878 16.4401 18.8878 19.0077Z"/>
+              </g>
+            </svg>
+            <svg class="sat-eye sat-eye--b" viewBox="0 0 26.544 34.906" aria-hidden="true">
+              <path fill="#fff" d="M0.571899 16.2024C-0.379758 31.0482 8.34378 34.5218 12.8245 34.4028C17.3845 33.7684 26.5762 34.4028 25.9098 16.6782C25.5252 6.44787 19.3672 0.500014 13.8951 0.5C9.73087 0.499989 1.52356 1.35649 0.571899 16.2024Z"/>
+              <g class="sat-eye-features">
+                <path class="sat-eye-line" d="M0.058 16.202L26.673 16.345" stroke="#000" stroke-width="2"/>
+                <path class="sat-eye-pupil" fill="#000" d="M18.8194 19.0078C18.8194 22.4514 17.3919 25.2431 13.9421 25.2431C10.4924 25.2431 9.06488 22.4514 9.06488 19.0078C9.06488 16.4403 9.06488 16.4403 13.9421 16.4403C18.8194 16.4403 18.8194 16.4402 18.8194 19.0078Z"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="opening-sat opening-sat--gold">
+          <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M66.5 34C66.5 51.9493 51.9493 66.5 34 66.5C16.0507 66.5 1.5 51.9493 1.5 34C1.5 16.0507 16.0507 1.5 34 1.5C51.9493 1.5 66.5 16.0507 66.5 34Z" stroke="#FFFFFF" stroke-width="3"/>
+            <path d="M62 34C62 49.464 49.464 62 34 62C18.536 62 6 49.464 6 34C6 18.536 18.536 6 34 6C49.464 6 62 18.536 62 34Z" stroke="#FFE38F" stroke-width="6"/>
+          </svg>
+          <span class="opening-sat-fill"></span>
+          <div class="gold-eyes" aria-hidden="true">
+            <svg class="gold-eye gold-eye--left" viewBox="0 0 40.5297 34.8378">
+              <g class="gold-eye-blink">
+                <path fill="#fff" d="M0.211254 16.6573C-1.84756 31.984 11.6491 35.1484 18.6548 34.8148C26.6136 34.8148 40.5297 28.81 40.5297 18.6589C40.5297 5.0915 30.8075 2.074 26.9472 0.787238C20.6564 -1.3097 7.64585 -0.213551 0.211254 16.6573Z"/>
+                <path class="gold-pupil gold-pupil--ccw" fill="#000" stroke="#000" d="M23.7336 16.5849C21.9035 19.9019 25.068 21.8749 26.879 22.4468C27.6415 22.8758 30.0857 22.4468 31.3111 20.7312C33.0268 18.3292 31.4541 16.3943 30.4533 15.7271C28.9759 14.631 25.5636 13.268 23.7336 16.5849Z"/>
+              </g>
+            </svg>
+            <svg class="gold-eye gold-eye--right" viewBox="0 0 40.5297 34.8378">
+              <g class="gold-eye-blink">
+                <path fill="#fff" d="M0.211254 16.6573C-1.84756 31.984 11.6491 35.1484 18.6548 34.8148C26.6136 34.8148 40.5297 28.81 40.5297 18.6589C40.5297 5.0915 30.8075 2.074 26.9472 0.787238C20.6564 -1.3097 7.64585 -0.213551 0.211254 16.6573Z"/>
+                <path class="gold-pupil gold-pupil--cw" fill="#000" stroke="#000" d="M23.7336 16.5849C21.9035 19.9019 25.068 21.8749 26.879 22.4468C27.6415 22.8758 30.0857 22.4468 31.3111 20.7312C33.0268 18.3292 31.4541 16.3943 30.4533 15.7271C28.9759 14.631 25.5636 13.268 23.7336 16.5849Z"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="nav-menu" class="nav-menu" hidden>
+    <div class="nav-menu-flood" aria-hidden="true"></div>
+    <nav class="nav-menu-list" aria-label="メニュー">
+      <button type="button" class="nav-item is-current" data-nav="top" aria-current="page">TOP</button>
+      <button type="button" class="nav-item" data-nav="concent">CONCENT</button>
+      <button type="button" class="nav-item" data-nav="post">POST</button>
+      <button type="button" class="nav-item" data-nav="search">SEARCH</button>
+      <button type="button" class="nav-item" data-nav="result">RESULT</button>
+    </nav>
+  </div>
+
+  <div id="chat-panel" class="chat-panel" hidden>
+    <div class="chat-panel-flood" aria-hidden="true"></div>
+    <button type="button" class="chat-close" aria-label="閉じる"></button>
+    <div class="chat-face" aria-hidden="true">
+      <img class="chat-eye chat-eye--a" src="images/chat-eye-a.svg" alt="" width="82" height="70">
+      <img class="chat-eye chat-eye--r" src="images/chat-eye-a.svg" alt="" width="82" height="70">
+      <div class="chat-pupil-box">
+        <div class="chat-pupil-shift">
+          <svg class="chat-pupil-svg" viewBox="0 0 150.23 69.9521" preserveAspectRatio="none" aria-hidden="true">
+            <path fill="#000" stroke="#000" d="M36.4117 32.5774C34.1478 36.6695 38.0625 39.1036 40.3028 39.8091C41.2461 40.3383 44.2697 39.8091 45.7858 37.6926C47.9082 34.7293 45.9626 32.3422 44.7245 31.5191C42.8969 30.1668 38.6756 28.4852 36.4117 32.5774Z"/>
+            <path fill="#000" stroke="#000" d="M139.412 32.5774C137.148 36.6695 141.062 39.1036 143.303 39.8091C144.246 40.3383 147.27 39.8091 148.786 37.6926C150.908 34.7293 148.963 32.3422 147.725 31.5191C145.897 30.1668 141.676 28.4852 139.412 32.5774Z"/>
+          </svg>
+        </div>
+      </div>
+      <img class="chat-lash chat-lash--r" src="images/chat-lash-r.svg" alt="" width="27" height="51">
+      <span class="chat-lash chat-lash--l"><img src="images/chat-lash-l.svg" alt="" width="27" height="51"></span>
+      <img class="chat-mark chat-mark--r" src="images/chat-mark-r.svg" alt="" width="18" height="28">
+      <span class="chat-mark chat-mark--l"><img src="images/chat-mark-l.svg" alt="" width="18" height="28"></span>
+    </div>
+    <div class="chat-sheet">
+      <iframe
+        class="chat-frame"
+        data-src="https://chat.ragmyai.com/ce0b2714-9e69-4600-9007-259107939e05"
+        title="案内チャット"
+        allow="microphone"
+      ></iframe>
+    </div>
+  </div>
+
+  <div class="menu-face" aria-hidden="true">
+    <svg class="menu-eye" viewBox="0 0 58.784 78">
+      <path fill="#fff" d="M0.663354 36.1601C-1.49786 69.8751 18.3133 77.7635 28.489 77.4934C38.8449 76.0525 59.7191 77.4934 58.2058 37.2407C57.3324 14.0076 43.3474 0.500032 30.9204 0.5C21.4634 0.499975 2.82457 2.44509 0.663354 36.1601Z"/>
+      <g class="menu-eye-lid menu-eye-lid--top">
+        <path d="M0.419 37.195H58.771" stroke="#000" stroke-width="2"/>
+      </g>
+      <g class="menu-eye-pupil">
+        <path fill="#000" d="M42.1028 42.5308C42.1028 50.3514 38.861 55.5428 31.0265 55.5428C23.1921 55.5428 19.9503 50.3514 19.9503 42.5308C19.9503 36.7 19.9503 36.7 31.0265 36.7C42.1028 36.7 42.1028 36.6999 42.1028 42.5308Z"/>
+      </g>
+      <g class="menu-eye-lid menu-eye-lid--bottom">
+        <path d="M2.224 55.844L57.568 55.242" stroke="#000" stroke-width="2"/>
+      </g>
+    </svg>
+    <svg class="menu-eye" viewBox="0 0 58.784 78">
+      <path fill="#fff" d="M0.663354 36.1601C-1.49786 69.8751 18.3133 77.7635 28.489 77.4934C38.8449 76.0525 59.7191 77.4934 58.2058 37.2407C57.3324 14.0076 43.3474 0.500032 30.9204 0.5C21.4634 0.499975 2.82457 2.44509 0.663354 36.1601Z"/>
+      <g class="menu-eye-lid menu-eye-lid--top">
+        <path d="M0.419 37.195H58.771" stroke="#000" stroke-width="2"/>
+      </g>
+      <g class="menu-eye-pupil">
+        <path fill="#000" d="M42.1028 42.5308C42.1028 50.3514 38.861 55.5428 31.0265 55.5428C23.1921 55.5428 19.9503 50.3514 19.9503 42.5308C19.9503 36.7 19.9503 36.7 31.0265 36.7C42.1028 36.7 42.1028 36.6999 42.1028 42.5308Z"/>
+      </g>
+      <g class="menu-eye-lid menu-eye-lid--bottom">
+        <path d="M2.224 55.844L57.568 55.242" stroke="#000" stroke-width="2"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="app">
+    <div class="bg-glow" aria-hidden="true"></div>
+    <div class="top-waves" aria-hidden="true">
+      <svg class="top-wave-shape" viewBox="0 0 804 874" preserveAspectRatio="none">
+        <path fill="#295EFF" d="M0 437 Q100.5 365 201 437 T402 437 T603 437 T804 437 V874 H0 Z"/>
+      </svg>
+    </div>
+
+    <!-- ① トップ -->
+    <section id="screen-top" class="screen is-active" aria-label="トップ">
+      <div class="top-stage">
+        <button type="button" class="top-start" id="btn-start">
+          <span class="top-start-label">START</span>
+          <span class="top-start-icon" aria-hidden="true">
+            <svg width="27.7128" height="24" viewBox="0 0 27.7128 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.8564 0L27.7128 24H0L13.8564 0Z" fill="white"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ③ 投稿画面 -->
+    <section id="screen-upload" class="screen post-screen" aria-label="投稿" hidden>
+      <div class="post-stage">
+        <div class="post-gradient post-gradient--top" aria-hidden="true"></div>
+        <div class="post-gradient post-gradient--bottom" aria-hidden="true"></div>
+        <button type="button" class="post-green" id="btn-post-green" aria-expanded="false" aria-label="開く"></button>
+        <div class="post-sheet" aria-hidden="true">
+          <div class="post-sheet-green"></div>
+          <div class="post-band" aria-hidden="true"></div>
+          <img class="post-sheet-eye post-sheet-eye--left" src="images/diag-fang-b.svg" alt="" width="21" height="25">
+          <img class="post-sheet-eye post-sheet-eye--right" src="images/diag-fang-a.svg" alt="" width="21" height="25">
+          <div class="post-photo">
+            <img id="post-photo-preview" alt="選択した写真" hidden>
+          </div>
+          <label class="post-plus">
+            <input type="file" id="post-photo-input" accept="image/*" aria-label="写真を選ぶ">
+            <img src="images/post-plus.svg" alt="" width="85" height="85">
+          </label>
+        </div>
+        <div class="post-diag" aria-hidden="true">
+          <p class="post-diag-status">診断しています</p>
+          <img class="diag-face" src="images/diag-face.svg" alt="" width="74" height="148">
+          <span class="diag-eye diag-eye--top"><img src="images/diag-fang-b.svg" alt="" width="21" height="25"></span>
+          <span class="diag-eye diag-eye--bottom"><img src="images/diag-fang-a.svg" alt="" width="21" height="25"></span>
+          <img class="diag-cap" src="images/diag-bubble.svg" alt="" width="121" height="72">
+          <div class="diag-bubble" aria-hidden="true">
+            <svg class="diag-puff diag-puff--1" viewBox="0 0 88.23 81.9257" width="88.23" height="81.9257">
+              <circle cx="3" cy="78.9257" r="3" fill="white"/>
+            </svg>
+            <svg class="diag-puff diag-puff--2" viewBox="0 0 88.23 81.9257" width="88.23" height="81.9257">
+              <circle cx="11.5" cy="72.4257" r="4.5" fill="white"/>
+            </svg>
+            <svg class="diag-puff diag-puff--3" viewBox="0 0 88.23 81.9257" width="88.23" height="81.9257">
+              <path fill="white" d="M21.5 19.9256C5.9 31.1256 13.3333 47.5923 19 54.4256C17.8 71.2256 30.5 70.0923 37 67.4257C53 81.8257 66.6667 71.0923 71.5 63.9257C95.1 54.7257 88.6667 35.4257 82.5 26.9257C82.5 2.12566 63.1667 0.92565 53.5 3.42564C30.3 -7.37436 22.5 9.92564 21.5 19.9256Z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="post-result" aria-hidden="true">
+          <div class="post-sheet-green"></div>
+          <img class="post-result-eye post-result-eye--left" src="images/diag-fang-b.svg" alt="" width="21" height="25">
+          <img class="post-result-eye post-result-eye--right" src="images/diag-fang-a.svg" alt="" width="21" height="25">
+          <div class="post-result-main">
+            <img id="post-result-match" alt="診断で選ばれた写真" hidden>
+            <p id="post-result-note" class="post-result-note" hidden></p>
+          </div>
+          <div class="post-result-sub">
+            <img id="post-result-yours" alt="送った写真" hidden>
+          </div>
+        </div>
+        <span class="post-peek-eye post-peek-eye--top">
+          <span class="post-peek-rot">
+            <svg class="post-peek-white" viewBox="0 0 20.9397 25.473" width="20.9397" height="25.473" aria-hidden="true">
+              <ellipse cx="10.4698" cy="12.7365" rx="10.4698" ry="12.7365" fill="#000" opacity="0.76"/>
+            </svg>
+            <svg class="post-peek-pupil" viewBox="0 0 5.82856 5.82856" width="5.82856" height="5.82856" aria-hidden="true">
+              <circle cx="2.91428" cy="2.91428" r="2.91428" fill="#fff"/>
+            </svg>
+          </span>
+        </span>
+        <span class="post-peek-eye post-peek-eye--bottom">
+          <span class="post-peek-rot">
+            <svg class="post-peek-white" viewBox="0 0 20.9397 25.473" width="20.9397" height="25.473" aria-hidden="true">
+              <ellipse cx="10.4698" cy="12.7365" rx="10.4698" ry="12.7365" fill="#000" opacity="0.76"/>
+            </svg>
+            <svg class="post-peek-pupil" viewBox="0 0 5.82856 5.82856" width="5.82856" height="5.82856" aria-hidden="true">
+              <circle cx="2.91428" cy="2.91428" r="2.91428" fill="#fff"/>
+            </svg>
+          </span>
+        </span>
+      </div>
+      <div class="post-form-keep" hidden>
+        <label class="upload-area" for="image-input">
+          <input type="file" id="image-input" accept="image/*" capture="environment" hidden>
+          <div class="upload-placeholder" id="upload-placeholder">
+            <span class="upload-icon" aria-hidden="true"></span>
+            <span class="upload-text">タップして写真を選択</span>
+            <span class="upload-sub">カメラまたはギャラリー（5MBまで）</span>
+          </div>
+          <img id="image-preview" class="image-preview" alt="選択した画像のプレビュー" hidden>
+        </label>
+        <div class="field">
+          <label class="field-label" for="description-input">説明文</label>
+          <textarea id="description-input" class="field-textarea" rows="3" maxlength="120" placeholder="例：雨上がりの校庭と虹" autocomplete="off"></textarea>
+          <div class="field-meta">
+            <span id="desc-error" class="field-error" role="alert" hidden></span>
+            <span class="field-count"><span id="desc-count">0</span>/120</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-submit" disabled>送信する</button>
+        <button type="button" class="btn btn-ghost" id="btn-back-top">トップへ戻る</button>
+      </div>
+    </section>
+
+    <!-- ④ ローディング -->
+    <section id="screen-loading" class="screen" aria-label="検索中" hidden>
+      <div class="screen-inner loading-screen">
+        <div class="spinner" aria-hidden="true"></div>
+        <p class="loading-main">似た見た目の画像を探しています…</p>
+        <p class="loading-status" id="loading-status">画像の色と雰囲気を読み取り中</p>
+      </div>
+    </section>
+
+    <!-- ⑤ 結果 -->
+    <section id="screen-result" class="screen" aria-label="マッチ結果" hidden>
+      <div class="screen-inner result-screen">
+        <h2 class="screen-title">予期せぬ一枚</h2>
+        <p class="score-phrase slide-up" id="score-phrase" style="--delay: 0ms"></p>
+
+        <figure class="match-figure slide-up" style="--delay: 80ms">
+          <img id="match-image" class="match-image" alt="マッチした画像" src="">
+          <figcaption class="match-caption">
+            <span class="result-label">相手の説明</span>
+            <p class="match-description" id="match-description"></p>
+          </figcaption>
+        </figure>
+
+        <div class="yours-block slide-up" style="--delay: 200ms">
+          <span class="result-label">あなたの投稿</span>
+          <div class="yours-row">
+            <img id="yours-image" class="yours-thumb" alt="あなたの画像" src="">
+            <p class="yours-description" id="yours-description"></p>
+          </div>
+        </div>
+
+        <p class="result-note slide-up" style="--delay: 280ms" id="result-note" hidden></p>
+
+        <div class="result-actions">
+          <button type="button" class="btn btn-primary" id="btn-retry">
+            もう一度送る
+          </button>
+          <button type="button" class="btn btn-ghost" id="btn-home">
+            トップへ戻る
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ② 注意事項モーダル（同意必須） -->
+  <div
+    id="notice-modal"
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="notice-title"
+    hidden
+  >
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-panel">
+      <h2 id="notice-title" class="modal-title">注意事項</h2>
+      <ul class="notice-list">
+        <li>投稿した画像と説明は、他の来場者に表示されることがあります</li>
+        <li>不適切な画像・個人が特定できる内容の投稿はご遠慮ください</li>
+        <li>画像は5MBまででお願いします</li>
+      </ul>
+      <button type="button" class="notice-agree" id="btn-agree">同意してはじめる</button>
+      <button type="button" class="notice-cancel" id="btn-disagree">キャンセル</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+uploads/*
+!uploads/.gitkeep
+data/entries.json
+.env
+.DS_Store
+*.log
