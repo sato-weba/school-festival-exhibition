@@ -191,8 +191,22 @@
         <div class="post-sheet" aria-hidden="true">
           <div class="post-sheet-green"></div>
           <div class="post-band" aria-hidden="true"></div>
-          <img class="post-sheet-eye post-sheet-eye--left" src="images/diag-fang-b.svg" alt="" width="21" height="25">
-          <img class="post-sheet-eye post-sheet-eye--right" src="images/diag-fang-a.svg" alt="" width="21" height="25">
+          <span class="post-sheet-eye post-sheet-eye--left">
+            <svg class="post-sheet-eye-shape" viewBox="0 0 20.9397 25.473" width="20.9397" height="25.473" aria-hidden="true">
+              <ellipse cx="10.4698" cy="12.7365" rx="10.4698" ry="12.7365" fill="#000" opacity="0.76"/>
+            </svg>
+            <svg class="post-sheet-pupil" viewBox="0 0 5.82856 5.82856" width="5.82856" height="5.82856" aria-hidden="true">
+              <circle cx="2.91428" cy="2.91428" r="2.91428" fill="#fff"/>
+            </svg>
+          </span>
+          <span class="post-sheet-eye post-sheet-eye--right">
+            <svg class="post-sheet-eye-shape" viewBox="0 0 20.9397 25.473" width="20.9397" height="25.473" aria-hidden="true">
+              <ellipse cx="10.4698" cy="12.7365" rx="10.4698" ry="12.7365" fill="#000" opacity="0.76"/>
+            </svg>
+            <svg class="post-sheet-pupil" viewBox="0 0 5.82856 5.82856" width="5.82856" height="5.82856" aria-hidden="true">
+              <circle cx="2.91428" cy="2.91428" r="2.91428" fill="#fff"/>
+            </svg>
+          </span>
           <div class="post-photo">
             <img id="post-photo-preview" alt="選択した写真" hidden>
           </div>
@@ -200,6 +214,13 @@
             <input type="file" id="post-photo-input" accept="image/*" aria-label="写真を選ぶ">
             <img src="images/post-plus.svg" alt="" width="85" height="85">
           </label>
+          <form id="post-caption" class="post-caption" hidden>
+            <div class="post-caption-row">
+              <input id="post-caption-input" type="text" maxlength="120" autocomplete="off" placeholder="この写真をひとことで" aria-label="写真の説明">
+              <button type="submit" id="post-caption-send">診断する</button>
+            </div>
+            <p id="post-caption-error" class="post-caption-error" role="alert" hidden></p>
+          </form>
         </div>
         <div class="post-diag" aria-hidden="true">
           <p class="post-diag-status">診断しています</p>
@@ -225,11 +246,18 @@
           <img class="post-result-eye post-result-eye--right" src="images/diag-fang-a.svg" alt="" width="21" height="25">
           <div class="post-result-main">
             <img id="post-result-match" alt="診断で選ばれた写真" hidden>
+            <p id="post-result-caption" class="post-result-caption" hidden></p>
             <p id="post-result-note" class="post-result-note" hidden></p>
           </div>
           <p id="post-result-score" class="post-result-score" hidden>
-            <span class="post-result-score-label">一致度</span>
-            <span id="post-result-score-value" class="post-result-score-value">0%</span>
+            <svg class="post-result-score-ring" viewBox="0 0 72 72" aria-hidden="true">
+              <circle class="post-result-score-track" cx="36" cy="36" r="30"></circle>
+              <circle class="post-result-score-arc" cx="36" cy="36" r="30"></circle>
+            </svg>
+            <span class="post-result-score-copy">
+              <span class="post-result-score-label">一致度</span>
+              <span id="post-result-score-value" class="post-result-score-value">0%</span>
+            </span>
           </p>
           <div class="post-result-sub">
             <img id="post-result-yours" alt="送った写真" hidden>

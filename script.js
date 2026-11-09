@@ -265,6 +265,7 @@
   let toPostLock = false;
   let diagTimer = null;
   let diagToken = 0;
+  let scoreTick = 0;
 
   const els = {
     screens: {
@@ -754,6 +755,12 @@
     els.imageInput.addEventListener("change", onImageSelected);
     const postPhotoInput = document.getElementById("post-photo-input");
     if (postPhotoInput) postPhotoInput.addEventListener("change", onImageSelected);
+    const postCaption = document.getElementById("post-caption");
+    if (postCaption) postCaption.addEventListener("submit", onPostCaptionSubmit);
+    const postCaptionInput = document.getElementById("post-caption-input");
+    if (postCaptionInput) {
+      postCaptionInput.addEventListener("input", () => setCaptionError(""));
+    }
     els.descriptionInput.addEventListener("input", onDescriptionInput);
     els.btnSubmit.addEventListener("click", onSubmit);
     els.btnBackTop.addEventListener("click", resetToTop);
@@ -1100,12 +1107,12 @@
     }
   }
 
-  function beginDiagnosis(file) {
+  function beginDiagnosis(file, description) {
     const token = ++diagToken;
     const stage = document.querySelector(".post-stage");
     const matchTask = requestMatch({
       file,
-      description: "写真",
+      description,
       previewUrl: selectedImageDataUrl || "",
     }).catch(() => null);
     if (diagTimer) window.clearTimeout(diagTimer);
@@ -1132,6 +1139,10 @@
     const scoreEl = document.getElementById("post-result-score");
     const scoreValue = document.getElementById("post-result-score-value");
     const note = document.getElementById("post-result-note");
+    const caption = document.getElementById("post-result-caption");
+    const matchText = payload && payload.match && payload.match.description
+      ? String(payload.match.description).trim()
+      : "";
     if (matchImg) {
       if (matchUrl) {
         matchImg.src = resolveMediaUrl(matchUrl);
@@ -1149,12 +1160,17 @@
           ? "ファイルを直接開いているため照合できません。GitHub Pages の公開URLか、npm start で開いた http://localhost:3000 を使ってください。"
           : "照合できませんでした。もう一度写真を選んでください。";
     }
+    if (caption) {
+      caption.textContent = matchUrl ? matchText : "";
+      caption.hidden = !matchUrl || !matchText;
+    }
     if (scoreEl && scoreValue) {
       const percent = matchPercent(payload);
       if (matchUrl && percent !== null) {
-        scoreValue.textContent = `${percent}%`;
         scoreEl.hidden = false;
+        playScore(percent);
       } else {
+        scoreTick += 1;
         scoreValue.textContent = "";
         scoreEl.hidden = true;
       }
@@ -1162,6 +1178,74 @@
     if (!stage) return;
     stage.classList.remove("is-diagnosing");
     stage.classList.add("is-result");
+  }
+
+  function playScore(percent) {
+    const value = document.getElementById("post-result-score-value");
+    const arc = document.querySelector(".post-result-score-arc");
+    const length = 188.5;
+    const token = ++scoreTick;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const paint = (amount) => {
+      if (value) value.textContent = `${Math.round(amount)}%`;
+      if (arc) arc.style.strokeDashoffset = String(length * (1 - amount / 100));
+    };
+    if (reduce) {
+      paint(percent);
+      return;
+    }
+    paint(0);
+    const started = performance.now();
+    const duration = 900;
+    const frame = (now) => {
+      if (token !== scoreTick) return;
+      const t = Math.min(1, (now - started) / duration);
+      const eased = 1 - (1 - t) ** 3;
+      paint(percent * eased);
+      if (t < 1) window.requestAnimationFrame(frame);
+    };
+    window.requestAnimationFrame(frame);
+  }
+
+  function setCaptionError(message) {
+    const el = document.getElementById("post-caption-error");
+    if (!el) return;
+    el.hidden = !message;
+    el.textContent = message || "";
+  }
+
+  function showPostCaption() {
+    const form = document.getElementById("post-caption");
+    if (!form) return;
+    form.hidden = false;
+    const input = document.getElementById("post-caption-input");
+    if (input) input.focus();
+  }
+
+  function hidePostCaption() {
+    const form = document.getElementById("post-caption");
+    const input = document.getElementById("post-caption-input");
+    if (input) input.value = "";
+    setCaptionError("");
+    if (form) form.hidden = true;
+  }
+
+  function onPostCaptionSubmit(event) {
+    event.preventDefault();
+    if (!selectedImageFile) {
+      setCaptionError("先に写真を選んでください。");
+      return;
+    }
+    const input = document.getElementById("post-caption-input");
+    const text = input ? input.value.trim() : "";
+    if (!validateDescriptionClient(text, true)) {
+      setCaptionError(els.descError.textContent);
+      return;
+    }
+    setCaptionError("");
+    els.descriptionInput.value = text;
+    onDescriptionInput();
+    beginDiagnosis(selectedImageFile, text);
   }
 
   function matchPercent(payload) {
@@ -1206,7 +1290,7 @@
       els.uploadArea.classList.add("has-preview");
       updateSubmitEnabled();
       if (event.target && event.target.id === "post-photo-input") {
-        beginDiagnosis(file);
+        showPostCaption();
       }
     };
     reader.readAsDataURL(file);
@@ -1226,6 +1310,7 @@
       postPhoto.hidden = true;
     }
     els.uploadArea.classList.remove("has-preview");
+    hidePostCaption();
     updateSubmitEnabled();
   }
 
@@ -1454,8 +1539,16 @@
     }
     const resultScore = document.getElementById("post-result-score");
     const resultScoreValue = document.getElementById("post-result-score-value");
+    const resultCaption = document.getElementById("post-result-caption");
+    scoreTick += 1;
     if (resultScore) resultScore.hidden = true;
     if (resultScoreValue) resultScoreValue.textContent = "";
+    const resultArc = document.querySelector(".post-result-score-arc");
+    if (resultArc) resultArc.style.strokeDashoffset = "188.5";
+    if (resultCaption) {
+      resultCaption.hidden = true;
+      resultCaption.textContent = "";
+    }
     if (postGreen) postGreen.setAttribute("aria-expanded", "false");
     // 同意はセッション内で維持（毎回モーダルを出すなら hasConsented = false）
     showTop();
