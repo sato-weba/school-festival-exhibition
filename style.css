@@ -1827,22 +1827,6 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
   left: calc((5.50474 - 2.91428) / 20.9397 * 100%);
 }
 
-.post-stage.is-green-open .post-sheet-eye,
-.post-stage.is-result .post-result-eye {
-  transform-origin: center center;
-  animation: character-blink 5.6s cubic-bezier(0.45, 0, 0.2, 1) infinite;
-}
-
-.post-stage.is-green-open .post-sheet-eye--right,
-.post-stage.is-result .post-result-eye--right {
-  animation-delay: 0.16s;
-}
-
-@keyframes character-blink {
-  0%, 38%, 54%, 100% { transform: scaleY(1); }
-  44%, 48% { transform: scaleY(0.14); }
-}
-
 .post-stage.is-green-open .post-sheet-eye--left .post-sheet-pupil,
 .post-stage.is-result .post-result-eye--left .post-sheet-pupil {
   animation: sheet-glance-left 3s cubic-bezier(0.45, 0, 0.2, 1) infinite;
@@ -2394,8 +2378,6 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
   .post-stage.is-diagnosing .diag-puff--3,
   .post-stage.is-green-open .post-sheet-pupil,
   .post-stage.is-result .post-result-eye .post-sheet-pupil,
-  .post-stage.is-green-open .post-sheet-eye,
-  .post-stage.is-result .post-result-eye,
   .post-stage.is-green-open .post-plus img {
     animation: none;
   }
