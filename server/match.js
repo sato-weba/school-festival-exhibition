@@ -93,6 +93,28 @@ function cosineSimilarity(a, b) {
 }
 
 /**
+ * 画面に出す一致度。
+ * コサイン類似度は色が明るい同士だと、絵柄が違っても 0.9 台に張り付く。
+ * 縮小した色の並びの差（RMSE）を四乗して、同じ写真は 100% 近く、
+ * 白い余白の多い絵と写真のような別物は数十%まで下がるようにする。
+ * @param {number[]} a
+ * @param {number[]} b
+ * @returns {number}
+ */
+function appearanceScore(a, b) {
+  const start = HIST_BINS ** 3;
+  if (!a || !b || a.length !== b.length || a.length <= start) return 0;
+  let sse = 0;
+  const n = a.length - start;
+  for (let i = 0; i < n; i += 1) {
+    const d = a[start + i] - b[start + i];
+    sse += d * d;
+  }
+  const rmse = Math.sqrt(sse / n);
+  return Math.pow(Math.max(0, 1 - rmse), 4);
+}
+
+/**
  * 生RGBバッファから特徴ベクトル（ヒストグラム + 縮小グリッド）を作る
  * @param {Buffer} raw
  * @param {number} width
@@ -305,23 +327,30 @@ async function findBestMatch(queryImagePath, pool, excludeId = null) {
     );
     scored = withEmb;
   } else {
+    const queryFeatures = await extractLocalImageFeatures(queryImagePath);
     scored = await Promise.all(
-      candidates.map(async (c) => ({
-        entry: c,
-        score: await localImageSimilarity(queryImagePath, c.imagePath),
-      }))
+      candidates.map(async (c) => {
+        const features = await extractLocalImageFeatures(c.imagePath);
+        const comparable = queryFeatures && features;
+        return {
+          entry: c,
+          rank: comparable ? cosineSimilarity(queryFeatures, features) : 0,
+          score: comparable ? appearanceScore(queryFeatures, features) : 0,
+        };
+      })
     );
   }
 
-  scored.sort((a, b) => b.score - a.score);
-  const topScore = scored[0].score;
+  const rankOf = (item) => (typeof item.rank === "number" ? item.rank : item.score);
+  scored.sort((a, b) => rankOf(b) - rankOf(a));
+  const topRank = rankOf(scored[0]);
 
-  if (topScore <= 0) {
+  if (topRank <= 0) {
     const pick = candidates[Math.floor(Math.random() * candidates.length)];
     return { match: pick, score: 0, method: "random" };
   }
 
-  const tops = scored.filter((s) => Math.abs(s.score - topScore) < 1e-9);
+  const tops = scored.filter((s) => Math.abs(rankOf(s) - topRank) < 1e-9);
   const pick = tops[Math.floor(Math.random() * tops.length)];
   return { match: pick.entry, score: pick.score, method };
 }

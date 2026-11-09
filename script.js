@@ -60,6 +60,24 @@
     return dot / (Math.sqrt(na) * Math.sqrt(nb));
   }
 
+  /**
+   * 画面に出す一致度。
+   * コサイン類似度は、白い余白の絵と明るい写真でも 90% 台になる。
+   * 色の並びの差を四乗して、見た目が違う組み合わせは数十%に下げる。
+   */
+  function appearanceScore(a, b) {
+    const start = HIST_BINS ** 3;
+    if (!a || !b || a.length !== b.length || a.length <= start) return 0;
+    let sse = 0;
+    const n = a.length - start;
+    for (let i = 0; i < n; i += 1) {
+      const d = a[start + i] - b[start + i];
+      sse += d * d;
+    }
+    const rmse = Math.sqrt(sse / n);
+    return Math.pow(Math.max(0, 1 - rmse), 4);
+  }
+
   function featuresFromRgba(raw, width, height) {
     const hist = new Array(HIST_BINS ** 3).fill(0);
     const grid = new Array(GRID * GRID * 3).fill(0);
@@ -183,7 +201,8 @@
         scored.push({
           entry,
           imageUrl,
-          score: cosineSimilarity(queryFeatures, features),
+          rank: cosineSimilarity(queryFeatures, features),
+          score: appearanceScore(queryFeatures, features),
         });
       } catch {
         /* 壊れたシードは候補から外す */
@@ -191,15 +210,15 @@
     }
     if (!scored.length) throw new Error("照合できる画像がありません。");
 
-    scored.sort((a, b) => b.score - a.score);
-    const topScore = scored[0].score;
+    scored.sort((a, b) => b.rank - a.rank);
+    const topRank = scored[0].rank;
     let pick;
     let method = "image";
-    if (topScore <= 0) {
+    if (topRank <= 0) {
       pick = scored[Math.floor(Math.random() * scored.length)];
       method = "random";
     } else {
-      const tops = scored.filter((item) => Math.abs(item.score - topScore) < 1e-9);
+      const tops = scored.filter((item) => Math.abs(item.rank - topRank) < 1e-9);
       pick = tops[Math.floor(Math.random() * tops.length)];
     }
 
