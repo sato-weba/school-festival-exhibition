@@ -1737,6 +1737,29 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
   bottom: 0;
 }
 
+.post-green-peek {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.post-screen.is-active .post-green-peek {
+  animation: green-peek-in 0.64s cubic-bezier(0.22, 0.9, 0.28, 1) 0.12s both;
+}
+
+@keyframes green-peek-in {
+  0% {
+    transform: translateX(28%);
+  }
+  62% {
+    transform: translateX(-2.2%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .post-green {
   position: absolute;
   right: 0;
@@ -1748,6 +1771,7 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
   transform: translate(50%, -50%);
   z-index: 4;
   padding: 0;
+  pointer-events: auto;
 }
 
 .post-sheet {
@@ -2115,6 +2139,10 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
   .post-stage.is-green-open .post-green,
   .post-stage.is-green-open .post-peek-eye {
     transition: none;
+  }
+
+  .post-screen.is-active .post-green-peek {
+    animation: none;
   }
 
   .post-stage.is-diagnosing .diag-cap,
