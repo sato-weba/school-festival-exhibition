@@ -1792,16 +1792,6 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
   background: #5eff29;
 }
 
-.post-band {
-  position: absolute;
-  left: 0;
-  top: calc(472 / 874 * 100%);
-  width: 100%;
-  height: calc(135 / 874 * 100%);
-  background: #fff;
-  z-index: 1;
-}
-
 .post-sheet-eye {
   position: absolute;
   top: calc(92 / 874 * 100%);
