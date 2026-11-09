@@ -2104,6 +2104,10 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
   position: absolute;
   inset: 0;
   z-index: 6;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  padding-top: calc(168 / 874 * 100dvh);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -2136,13 +2140,13 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
 
 .post-result-main,
 .post-result-sub {
-  position: absolute;
+  position: relative;
   background: #e6e4df;
   overflow: hidden;
   z-index: 2;
   box-shadow:
-    0 0 0 8px #fff,
-    0 16px 30px rgba(16, 40, 0, 0.14);
+    0 0 0 7px #fff,
+    0 14px 26px rgba(16, 40, 0, 0.14);
 }
 
 .post-result-sub {
@@ -2152,17 +2156,14 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
 }
 
 .post-result-main {
-  left: calc(68 / 402 * 100%);
-  top: calc(189 / 874 * 100%);
-  width: calc(265 / 402 * 100%);
-  height: calc(265 / 874 * 100%);
+  width: calc(248 / 402 * 100%);
+  aspect-ratio: 1;
 }
 
 .post-result-sub {
-  left: calc(146 / 402 * 100%);
-  top: calc(566 / 874 * 100%);
-  width: calc(109 / 402 * 100%);
-  height: calc(109 / 874 * 100%);
+  width: calc(120 / 402 * 100%);
+  aspect-ratio: 1;
+  margin-top: 22px;
 }
 
 .post-result-main img,
@@ -2207,25 +2208,22 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
 }
 
 .post-result-score {
-  position: absolute;
-  left: 50%;
-  top: calc(462 / 874 * 100%);
+  position: relative;
   z-index: 4;
   display: grid;
   place-items: center;
-  width: 96px;
-  height: 96px;
-  margin: 0;
+  width: 92px;
+  height: 92px;
+  margin: 20px 0 0;
   padding: 0;
   border-radius: 50%;
   background:
     radial-gradient(circle at 50% 42%, #fff 0%, #f4fff0 72%);
   color: #111;
   text-align: center;
-  transform: translateX(-50%);
   box-shadow:
     0 10px 22px rgba(16, 40, 0, 0.12),
-    0 0 0 6px rgba(255, 255, 255, 0.55);
+    0 0 0 6px rgba(255, 255, 255, 0.92);
   font-family: Inter, var(--font-display);
   line-height: 1;
 }
@@ -2235,9 +2233,9 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
 }
 
 @keyframes score-medal-in {
-  0% { opacity: 0; transform: translateX(-50%) scale(0.7); }
-  68% { opacity: 1; transform: translateX(-50%) scale(1.06); }
-  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  0% { opacity: 0; transform: scale(0.7); }
+  68% { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 .post-result-score-ring {
