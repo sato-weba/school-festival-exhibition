@@ -84,6 +84,7 @@
   <div id="chat-panel" class="chat-panel" hidden>
     <div class="chat-panel-flood" aria-hidden="true"></div>
     <button type="button" class="chat-close" aria-label="閉じる"></button>
+    <div class="chat-top" aria-hidden="true"></div>
     <div class="chat-face" aria-hidden="true">
       <img class="chat-eye chat-eye--a" src="images/chat-eye-a.svg" alt="" width="82" height="70">
       <img class="chat-eye chat-eye--r" src="images/chat-eye-a.svg" alt="" width="82" height="70">
@@ -204,6 +205,10 @@
             <img id="post-result-match" alt="診断で選ばれた写真" hidden>
             <p id="post-result-note" class="post-result-note" hidden></p>
           </div>
+          <p id="post-result-score" class="post-result-score" hidden>
+            <span class="post-result-score-label">一致度</span>
+            <span id="post-result-score-value" class="post-result-score-value">0%</span>
+          </p>
           <div class="post-result-sub">
             <img id="post-result-yours" alt="送った写真" hidden>
           </div>

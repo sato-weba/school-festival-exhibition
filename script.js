@@ -462,8 +462,9 @@
     panel.classList.add("is-open");
     window.setTimeout(() => {
       if (!panel.classList.contains("is-open")) return;
+      panel.style.clipPath = "none";
       mountChatFrame();
-    }, reduce ? 0 : 750);
+    }, reduce ? 0 : 780);
   }
 
   function mountChatFrame() {
@@ -481,6 +482,10 @@
     panel.classList.remove("is-open");
     if (button) button.setAttribute("aria-expanded", "false");
     shiftBlueCircle(false);
+    const radius = Math.hypot(window.innerWidth, window.innerHeight);
+    panel.style.transition = "none";
+    panel.style.clipPath = `circle(${radius}px at ${anchor})`;
+    void panel.offsetWidth;
     panel.style.transition = reduce ? "none" : "clip-path 0.75s cubic-bezier(0.45, 0, 0.2, 1)";
     panel.style.clipPath = `circle(0px at ${anchor})`;
     const finish = () => {
@@ -1105,6 +1110,8 @@
       yoursImg.hidden = false;
     }
     const matchUrl = payload && payload.match && payload.match.imageUrl;
+    const scoreEl = document.getElementById("post-result-score");
+    const scoreValue = document.getElementById("post-result-score-value");
     const note = document.getElementById("post-result-note");
     if (matchImg) {
       if (matchUrl) {
@@ -1123,9 +1130,26 @@
           ? "ファイルを直接開いているため照合できません。GitHub Pages の公開URLか、npm start で開いた http://localhost:3000 を使ってください。"
           : "照合できませんでした。もう一度写真を選んでください。";
     }
+    if (scoreEl && scoreValue) {
+      const percent = matchPercent(payload);
+      if (matchUrl && percent !== null) {
+        scoreValue.textContent = `${percent}%`;
+        scoreEl.hidden = false;
+      } else {
+        scoreValue.textContent = "";
+        scoreEl.hidden = true;
+      }
+    }
     if (!stage) return;
     stage.classList.remove("is-diagnosing");
     stage.classList.add("is-result");
+  }
+
+  function matchPercent(payload) {
+    if (!payload || payload.method === "random") return 0;
+    const score = Number(payload.score);
+    if (!Number.isFinite(score)) return null;
+    return Math.max(0, Math.min(100, Math.round(score * 100)));
   }
 
   function onImageSelected(event) {
@@ -1409,6 +1433,10 @@
       resultNote.hidden = true;
       resultNote.textContent = "";
     }
+    const resultScore = document.getElementById("post-result-score");
+    const resultScoreValue = document.getElementById("post-result-score-value");
+    if (resultScore) resultScore.hidden = true;
+    if (resultScoreValue) resultScoreValue.textContent = "";
     if (postGreen) postGreen.setAttribute("aria-expanded", "false");
     // 同意はセッション内で維持（毎回モーダルを出すなら hasConsented = false）
     showTop();

@@ -680,7 +680,7 @@ body:has(#nav-menu.is-open) .menu-face {
 .chat-panel {
   position: fixed;
   inset: 0;
-  z-index: 84;
+  z-index: 98;
   clip-path: circle(0px at 0% 100%);
 }
 
@@ -713,7 +713,7 @@ body.is-chat-open .opening-sat--gold {
 .chat-face {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
   container-type: size;
 }
 
@@ -723,7 +723,7 @@ body.is-chat-open .opening-sat--gold {
   right: 0;
   top: 0;
   height: calc(217 / 874 * 100%);
-  z-index: 3;
+  z-index: 4;
   padding: 0;
   border: 0;
   background: transparent;
@@ -843,10 +843,21 @@ body.is-chat-open .opening-sat--gold {
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(217 / 874 * 100%);
-  height: calc(657 / 874 * 100%);
+  top: 0;
+  height: 100%;
   background: #fff;
-  z-index: 4;
+  z-index: 1;
+}
+
+.chat-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(217 / 874 * 100%);
+  background: #ffe38f;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .chat-frame {
@@ -1987,6 +1998,37 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
   color: #222;
   font-size: 14px;
   line-height: 1.6;
+}
+
+.post-result-score {
+  position: absolute;
+  left: 50%;
+  top: calc(474 / 874 * 100%);
+  z-index: 3;
+  margin: 0;
+  padding: 8px 18px 10px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  text-align: center;
+  transform: translateX(-50%);
+  font-family: Inter, var(--font-display);
+  line-height: 1;
+}
+
+.post-result-score-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.post-result-score-value {
+  display: block;
+  font-size: clamp(28px, 8vw, 40px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .post-stage.is-result .post-sheet,
