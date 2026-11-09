@@ -1628,26 +1628,29 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
 
 .modal-panel {
   position: absolute;
-  left: calc(16 / 402 * 100%);
-  top: calc(322 / 874 * 100%);
-  width: calc(369 / 402 * 100%);
-  height: calc(534 / 874 * 100%);
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(369px, calc(100% - 28px));
+  height: auto;
+  max-height: calc(100dvh - 36px);
   box-sizing: border-box;
   background: #ffffff;
-  border-radius: 30px;
-  padding: calc(37 / 534 * 100%) calc(48 / 369 * 100%) 0;
+  border-radius: 28px;
+  padding: 26px 22px 16px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   overflow: auto;
 }
 
 .modal-title {
-  margin: 0 0 18px;
-  font-family: Inter, var(--font-display);
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 1.28;
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.06em;
   color: #000000;
   text-align: center;
 }
@@ -1655,55 +1658,57 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
 .notice-list {
   list-style: none;
   width: 100%;
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 12px;
 }
 
 .notice-list li {
   position: relative;
-  padding-left: 31px;
-  color: rgba(0, 0, 0, 0.5);
-  font-family: Inter, var(--font-body);
-  font-size: 20px;
+  padding-left: 16px;
+  color: rgba(0, 0, 0, 0.72);
+  font-family: var(--font-body);
+  font-size: 0.94rem;
   font-weight: 500;
-  line-height: 1.68;
+  line-height: 1.65;
+  text-wrap: pretty;
 }
 
 .notice-list li::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0.42em;
-  width: 10px;
-  height: 10px;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #8fabff;
 }
 
 .notice-agree {
-  width: calc(272 / 369 * 100%);
-  height: 58px;
+  width: 100%;
+  height: 48px;
   border: 0;
-  border-radius: 15px;
+  border-radius: 14px;
   color: #ffffff;
   background: linear-gradient(-90deg, #537eff 0%, #8bf1ff 100%);
-  font-family: Inter, var(--font-display);
-  font-size: 20px;
+  font-family: var(--font-display);
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 1.68;
+  line-height: 1.4;
 }
 
 .notice-cancel {
-  margin-top: 18px;
+  margin-top: 4px;
+  min-height: 40px;
   border: 0;
   background: none;
-  color: rgba(0, 0, 0, 0.5);
-  font-family: Inter, var(--font-display);
-  font-size: 20px;
+  color: rgba(0, 0, 0, 0.55);
+  font-family: var(--font-display);
+  font-size: 0.92rem;
   font-weight: 600;
-  line-height: 1.68;
+  line-height: 1.4;
 }
 
 .post-screen.screen.is-active {
