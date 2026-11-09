@@ -1,7 +1,7 @@
 {
   "name": "school-festival-exhibition",
   "version": "1.0.0",
-  "description": "予期せぬ一枚 — 文化祭向け画像マッチ体験Web",
+  "description": "ランダム画像照合アプリ — 文化祭向け画像マッチ体験Web",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",

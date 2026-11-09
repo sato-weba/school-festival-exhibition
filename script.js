@@ -1,5 +1,5 @@
 /**
- * 予期せぬ一枚
+ * ランダム画像照合アプリ
  * トップ → 注意事項同意 → 投稿 → ローディング → マッチ結果
  */
 
@@ -1484,7 +1484,7 @@
   }
 
   function renderResult(data) {
-    els.scorePhrase.textContent = data.scorePhrase || "予期せぬ一枚";
+    els.scorePhrase.textContent = data.scorePhrase || "ランダム画像照合アプリ";
     els.matchImage.src = resolveMediaUrl(data.match.imageUrl);
     els.matchDescription.textContent = data.match.description;
 

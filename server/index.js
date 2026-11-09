@@ -1,5 +1,5 @@
 /**
- * 予期せぬ一枚 — Express API
+ * ランダム画像照合アプリ — Express API
  */
 
 const path = require("path");
@@ -56,7 +56,7 @@ app.get("/api/health", (_req, res) => {
   const counts = store.getEntryCount();
   res.json({
     ok: true,
-    service: "予期せぬ一枚",
+    service: "ランダム画像照合アプリ",
     counts,
     imageMatching: true,
     openaiVision: Boolean(process.env.OPENAI_API_KEY),
@@ -152,6 +152,6 @@ function safeUnlink(filePath) {
 
 app.listen(PORT, () => {
   const counts = store.getEntryCount();
-  console.log(`予期せぬ一枚 listening on http://localhost:${PORT}`);
+  console.log(`ランダム画像照合アプリ listening on http://localhost:${PORT}`);
   console.log(`pool: seeds=${counts.seeds} users=${counts.users} total=${counts.total}`);
 });
