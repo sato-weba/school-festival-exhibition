@@ -102,7 +102,7 @@ Remove-Item data/entries.json -ErrorAction SilentlyContinue
 
 - フロント: HTML / CSS / JavaScript（フレームワークなし）
 - バックエンド: Node.js + Express + multer
-- 保存: `data/entries.json` + `uploads/`
+- 保存: 手元は `data/entries.json` + `uploads/`。公開時は無料の Supabase Storage
 - 照合: **画像のみ**（ローカル特徴 / OpenAI Vision＋Embedding。説明文は不使用）
 
 ## 公開について
@@ -113,14 +113,21 @@ Remove-Item data/entries.json -ErrorAction SilentlyContinue
 
 `index.html` をダブルクリックした `file://` でも照合できません。
 
-### Render に出す（会場の外で蓄積する）
+### 無料で公開する（約3時間の無人展示）
 
-`render.yaml` は、有料の Web サービスに 1GB のディスクを載せ、投稿を `/var/data` に残します。無料枠にはディスクが無く、再起動やスリープで来場者の投稿が消えます。
+料金はかかりません。使う無料枠は次の2つです。
 
-1. [Render](https://render.com) に GitHub アカウントでログインする
-2. New → Blueprint で、このリポジトリを選ぶ
-3. デプロイ後の `https://....onrender.com` をスマホで開き、写真を2回送る
-4. 2回目の結果が、1回目に送った写真になり得ることを確認する
-5. そのURLでQRを作る
+- [Supabase](https://supabase.com) … 投稿画像と一覧を保存する。サーバーが止まっても残る
+- [Render](https://render.com) の Free Web Service … 画面と照合を配信する。15分ほどアクセスがないと止まるが、投稿は Supabase に残っているので次の起動で戻る
 
-環境変数 `DATA_DIR` を変えると、`data/entries.json` と `uploads/` の保存先を移動できます。未設定のときはこのフォルダの中です。
+Supabase の無料プロジェクトは、1週間ほど使わないと休止します。展示の朝にダッシュボードを開いて起こしてください。
+
+1. Supabase で無料プロジェクトを作る
+2. Project Settings → API の Project URL と `service_role` キーを控える。`service_role` は公開しない
+3. このリポジトリを GitHub に push する
+4. Render に GitHub でログインし、New → Blueprint でこのリポジトリを選ぶ。料金プランは Free のまま
+5. 環境変数 `SUPABASE_URL` と `SUPABASE_SERVICE_ROLE_KEY` に、控えた値を入れる
+6. デプロイ後の `https://....onrender.com/api/health` を開き、`"storage":"supabase"` と `users` を確認する
+7. スマホで写真を2回送り、`users` が 2 になることを確認する。その URL で QR を作る
+
+最初の来場者が、停止していたサーバーの起動を待つことがあります。展示のあいだ [cron-job.org](https://cron-job.org) の無料ジョブで、10分ごとに `https://....onrender.com/api/health` を開くと、待ちが短くなります。

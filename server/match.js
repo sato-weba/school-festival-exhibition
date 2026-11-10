@@ -328,17 +328,16 @@ async function findBestMatch(queryImagePath, pool, excludeId = null) {
     scored = withEmb;
   } else {
     const queryFeatures = await extractLocalImageFeatures(queryImagePath);
-    scored = await Promise.all(
-      candidates.map(async (c) => {
-        const features = await extractLocalImageFeatures(c.imagePath);
-        const comparable = queryFeatures && features;
-        return {
-          entry: c,
-          rank: comparable ? cosineSimilarity(queryFeatures, features) : 0,
-          score: comparable ? appearanceScore(queryFeatures, features) : 0,
-        };
-      })
-    );
+    scored = [];
+    for (const candidate of candidates) {
+      const features = await extractLocalImageFeatures(candidate.imagePath);
+      const comparable = queryFeatures && features;
+      scored.push({
+        entry: candidate,
+        rank: comparable ? cosineSimilarity(queryFeatures, features) : 0,
+        score: comparable ? appearanceScore(queryFeatures, features) : 0,
+      });
+    }
   }
 
   const rankOf = (item) => (typeof item.rank === "number" ? item.rank : item.score);

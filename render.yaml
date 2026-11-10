@@ -1,19 +1,20 @@
-# 来場者の投稿を残すための Render 設定。
-# ディスクは有料の Web サービスでのみ使える。無料枠では再起動で投稿が消える。
+# 無料枠。投稿の実体はサーバーのディスクではなく Supabase 無料枠に残す。
 services:
   - type: web
     name: school-festival-exhibition
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
         value: "20"
-      - key: DATA_DIR
-        value: /var/data
-    disk:
-      name: exhibition-data
-      mountPath: /var/data
-      sizeGB: 1
+      - key: REQUIRE_REMOTE_STORE
+        value: "1"
+      - key: SUPABASE_BUCKET
+        value: exhibition
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false

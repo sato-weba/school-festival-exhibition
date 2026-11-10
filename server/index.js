@@ -60,6 +60,7 @@ app.get("/api/health", (_req, res) => {
     counts,
     imageMatching: true,
     openaiVision: Boolean(process.env.OPENAI_API_KEY),
+    storage: store.storageMode(),
   });
 });
 
@@ -110,7 +111,7 @@ app.post("/api/match", (req, res) => {
       const createdAt = new Date().toISOString();
 
       // 成功後に自分の投稿をプールへ追加
-      store.addEntry({
+      await store.addEntry({
         id: newId,
         description: validation.original,
         filename: req.file.filename,
@@ -151,9 +152,18 @@ function safeUnlink(filePath) {
 }
 
 const HOST = process.env.HOST || "0.0.0.0";
-app.listen(PORT, HOST, () => {
+
+async function main() {
+  await store.prepareStorage();
   const counts = store.getEntryCount();
-  console.log(`ランダム画像照合アプリ listening on http://${HOST}:${PORT}`);
-  console.log(`storage: ${store.UPLOADS_DIR}`);
-  console.log(`pool: seeds=${counts.seeds} users=${counts.users} total=${counts.total}`);
+  app.listen(PORT, HOST, () => {
+    console.log(`ランダム画像照合アプリ listening on http://${HOST}:${PORT}`);
+    console.log(`storage: ${store.storageMode()} (${store.UPLOADS_DIR})`);
+    console.log(`pool: seeds=${counts.seeds} users=${counts.users} total=${counts.total}`);
+  });
+}
+
+main().catch((err) => {
+  console.error(err.message || err);
+  process.exit(1);
 });
