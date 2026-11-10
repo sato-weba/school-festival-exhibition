@@ -401,8 +401,20 @@
     return onPostScreen() ? "0% 0%" : "100% 0%";
   }
 
+  function currentNavKey() {
+    const stage = document.querySelector(".post-stage");
+    if (stage && stage.classList.contains("is-diagnosing")) return "search";
+    if (stage && stage.classList.contains("is-result")) return "result";
+    const loading = document.getElementById("screen-loading");
+    if (loading && loading.classList.contains("is-active")) return "search";
+    const result = document.getElementById("screen-result");
+    if (result && result.classList.contains("is-active")) return "result";
+    if (onPostScreen()) return "post";
+    return "top";
+  }
+
   function syncMenuCurrent() {
-    const key = onPostScreen() ? "post" : "top";
+    const key = currentNavKey();
     document.querySelectorAll(".nav-item").forEach((item) => {
       const current = item.dataset.nav === key;
       item.classList.toggle("is-current", current);
@@ -801,6 +813,7 @@
       el.hidden = !isTarget;
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
+    syncMenuCurrent();
   }
 
   function showTop() {
@@ -1133,6 +1146,7 @@
       if (token !== diagToken || !stage) return;
       stage.classList.remove("is-result");
       stage.classList.add("is-diagnosing");
+      syncMenuCurrent();
     }, 420);
     Promise.all([matchTask, delay(3420)]).then(([payload]) => {
       if (token !== diagToken) return;
@@ -1192,6 +1206,7 @@
     if (!stage) return;
     stage.classList.remove("is-diagnosing");
     stage.classList.add("is-result");
+    syncMenuCurrent();
   }
 
   function playScore(percent) {
