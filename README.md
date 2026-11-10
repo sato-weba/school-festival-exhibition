@@ -107,18 +107,20 @@ Remove-Item data/entries.json -ErrorAction SilentlyContinue
 
 ## 公開について
 
-`index.html` をダブルクリックした `file://` では照合できません。ブラウザがローカルファイルの読み取りを止めるためです。
+展示は紙のQRと説明資料だけです。会場にPCは置きません。QRのリンク先は、インターネット上で動き続ける Node サーバーの `https://...` にしてください。来場者のスマホがそのURLを開くと、投稿はサーバーに保存され、次の来場者の候補になります。
 
-### GitHub Pages（公開URL）
+`https://sato-weba.github.io/school-festival-exhibition/` は画面を配信するだけで、投稿を保存できません。このURLはQRに使わないでください。サーバーに繋がらないときは、用意した7枚だけとの照合結果は出しません。
 
-リポジトリを GitHub Pages で出すと、画面とシード画像との照合は動きます。照合先は `seeds/meta.json` と `seeds/images/` だけです。来場者の写真はブラウザの中で比べるだけで、次の人の候補には残りません。GitHub Pages はファイルを書き込めないためです。
+`index.html` をダブルクリックした `file://` でも照合できません。
 
-1. このフォルダを GitHub リポジトリに push する
-2. リポジトリの Settings → Pages で、Branch を公開ブランチ、フォルダを `/ (root)` にする
-3. 表示された `https://<ユーザー>.github.io/<リポジトリ>/` をスマホで開く
+### Render に出す（会場の外で蓄積する）
 
-プロジェクトサイトでは先頭が `/` のパスだとリポジトリ名が抜けるため、フロントの API・画像参照はページの位置からの相対URLにしています。
+`render.yaml` は、有料の Web サービスに 1GB のディスクを載せ、投稿を `/var/data` に残します。無料枠にはディスクが無く、再起動やスリープで来場者の投稿が消えます。
 
-### 来場者の投稿もプールに残す場合
+1. [Render](https://render.com) に GitHub アカウントでログインする
+2. New → Blueprint で、このリポジトリを選ぶ
+3. デプロイ後の `https://....onrender.com` をスマホで開き、写真を2回送る
+4. 2回目の結果が、1回目に送った写真になり得ることを確認する
+5. そのURLでQRを作る
 
-`npm start` の Node サーバーが必要です。会場のPC（同じWi-Fi）か、Render / Railway などでそのサーバーを公開し、QR はそのURLにしてください。永続ディスクがない無料枠では、再起動で `uploads` と `entries.json` が消えることがあります。
+環境変数 `DATA_DIR` を変えると、`data/entries.json` と `uploads/` の保存先を移動できます。未設定のときはこのフォルダの中です。

@@ -1,0 +1,19 @@
+# 来場者の投稿を残すための Render 設定。
+# ディスクは有料の Web サービスでのみ使える。無料枠では再起動で投稿が消える。
+services:
+  - type: web
+    name: school-festival-exhibition
+    runtime: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: DATA_DIR
+        value: /var/data
+    disk:
+      name: exhibition-data
+      mountPath: /var/data
+      sizeGB: 1

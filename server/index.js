@@ -150,8 +150,10 @@ function safeUnlink(filePath) {
   }
 }
 
-app.listen(PORT, () => {
+const HOST = process.env.HOST || "0.0.0.0";
+app.listen(PORT, HOST, () => {
   const counts = store.getEntryCount();
-  console.log(`ランダム画像照合アプリ listening on http://localhost:${PORT}`);
+  console.log(`ランダム画像照合アプリ listening on http://${HOST}:${PORT}`);
+  console.log(`storage: ${store.UPLOADS_DIR}`);
   console.log(`pool: seeds=${counts.seeds} users=${counts.users} total=${counts.total}`);
 });

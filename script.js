@@ -177,15 +177,16 @@
   }
 
   async function serverAvailable() {
-    if (serverMode !== null) return serverMode;
+    if (serverMode === true) return true;
     try {
-      const res = await fetch(apiUrl("/api/health"), { signal: AbortSignal.timeout(2000) });
+      const res = await fetch(apiUrl("/api/health"), { signal: AbortSignal.timeout(8000) });
       const type = res.headers.get("content-type") || "";
       serverMode = res.ok && type.includes("json");
     } catch {
       serverMode = false;
     }
-    return serverMode;
+    if (!serverMode) serverMode = null;
+    return serverMode === true;
   }
 
   async function matchAgainstSeeds(file) {
@@ -1114,7 +1115,10 @@
       file,
       description,
       previewUrl: selectedImageDataUrl || "",
-    }).catch(() => null);
+    }).catch((err) => ({
+      ok: false,
+      error: (err && err.message) || "照合サーバーに接続できません。",
+    }));
     if (diagTimer) window.clearTimeout(diagTimer);
     diagTimer = window.setTimeout(() => {
       if (token !== diagToken || !stage) return;
@@ -1156,9 +1160,10 @@
       note.hidden = Boolean(matchUrl);
       note.textContent = matchUrl
         ? ""
-        : location.protocol === "file:"
-          ? "ファイルを直接開いているため照合できません。GitHub Pages の公開URLか、npm start で開いた http://localhost:3000 を使ってください。"
-          : "照合できませんでした。もう一度写真を選んでください。";
+        : (payload && payload.error) ||
+          (location.protocol === "file:"
+            ? "ファイルを直接開いているため照合できません。公開した照合サーバーのURLを使ってください。"
+            : "照合できませんでした。もう一度写真を選んでください。");
     }
     if (caption) {
       caption.textContent = matchUrl ? matchText : "";
@@ -1459,28 +1464,20 @@
   }
 
   /**
-   * サーバーがあれば投稿を保存して照合する。
-   * GitHub Pages のように API が無いときは、同梱シード画像だけで照合する。
+   * 投稿は必ずサーバーに保存する。保存できないときはシードだけで結果を出さない。
    */
   async function requestMatch(payload) {
-    if (await serverAvailable()) {
-      try {
-        return await requestMatchFromServer(payload);
-      } catch (err) {
-        if (!err || !err.isNetwork) throw err;
-        serverMode = false;
-      }
+    if (!(await serverAvailable())) {
+      const error = new Error("照合サーバーに接続できません。通信できる場所でもう一度お試しください。");
+      error.isNetwork = true;
+      throw error;
     }
-
-    const local = await matchAgainstSeeds(payload.file);
-    return {
-      ...local,
-      yours: {
-        description: payload.description,
-        imageUrl: "",
-      },
-      localPreviewUrl: payload.previewUrl,
-    };
+    try {
+      return await requestMatchFromServer(payload);
+    } catch (err) {
+      if (err && err.isNetwork) serverMode = null;
+      throw err;
+    }
   }
 
   function renderResult(data) {

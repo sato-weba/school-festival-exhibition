@@ -6,9 +6,11 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
-const DATA_DIR = path.join(ROOT, "data");
+// DATA_DIR を指定すると、投稿はリポジトリの外（クラウドの永続ディスク）に残る。
+const STORAGE_ROOT = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : ROOT;
+const DATA_DIR = path.join(STORAGE_ROOT, "data");
 const ENTRIES_PATH = path.join(DATA_DIR, "entries.json");
-const UPLOADS_DIR = path.join(ROOT, "uploads");
+const UPLOADS_DIR = path.join(STORAGE_ROOT, "uploads");
 const SEEDS_META_PATH = path.join(ROOT, "seeds", "meta.json");
 const SEEDS_IMAGES_DIR = path.join(ROOT, "seeds", "images");
 
