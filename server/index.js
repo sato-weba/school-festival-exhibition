@@ -73,6 +73,34 @@ app.get("/api/entries", (_req, res) => {
   res.json({ count: store.getEntryCount().total });
 });
 
+app.get("/api/maintenance/entries", (_req, res) => {
+  if (storageState !== "ready") {
+    return res.status(503).json({ ok: false, error: storageError || "準備中です。" });
+  }
+  res.json({
+    ok: true,
+    entries: store.loadUserEntries().map((item) => ({
+      id: item.id,
+      description: item.description,
+      filename: item.filename,
+      createdAt: item.createdAt,
+    })),
+  });
+});
+
+app.post("/api/maintenance/delete", async (req, res) => {
+  try {
+    if (storageState !== "ready") {
+      return res.status(503).json({ ok: false, error: storageError || "準備中です。" });
+    }
+    const ids = Array.isArray(req.body?.ids) ? req.body.ids.map(String) : [];
+    const removed = await store.removeEntries(ids);
+    res.json({ ok: true, removed, counts: store.getEntryCount() });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message || "削除に失敗しました。" });
+  }
+});
+
 app.post("/api/match", (req, res) => {
   upload.single("image")(req, res, async (err) => {
     if (err) {

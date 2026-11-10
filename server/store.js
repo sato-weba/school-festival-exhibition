@@ -98,6 +98,16 @@ async function uploadRemote(objectPath, body, contentType) {
   throw new Error(`投稿を保存できませんでした (${res.status}) ${text.slice(0, 180)}`);
 }
 
+async function deleteRemote(objectPath) {
+  const res = await supabaseStorage(`/object/${bucketName()}/${objectPath}`, {
+    method: "DELETE",
+  });
+  if (res.ok || res.status === 404) return;
+  const text = await res.text();
+  if (isMissingRemoteObject(res.status, text)) return;
+  throw new Error(`投稿を削除できませんでした (${res.status}) ${text.slice(0, 180)}`);
+}
+
 function isMissingRemoteObject(status, text) {
   if (status === 404) return true;
   if (status !== 400) return false;
@@ -253,6 +263,37 @@ async function addEntry(entry) {
   return saved;
 }
 
+async function removeEntries(ids) {
+  ensureDirs();
+  const idSet = new Set(ids);
+  const data = readJsonSafe(ENTRIES_PATH, { entries: [] });
+  if (!Array.isArray(data.entries)) data.entries = [];
+  const removed = [];
+  data.entries = data.entries.filter((item) => {
+    if (!item || !idSet.has(item.id)) return true;
+    removed.push(item);
+    return false;
+  });
+  for (const item of removed) {
+    const filePath = path.join(UPLOADS_DIR, item.filename);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    if (remoteEnabled() && item.filename) await deleteRemote(`uploads/${item.filename}`);
+  }
+  writeEntries(data);
+  if (remoteEnabled()) {
+    await uploadRemote(
+      "data/entries.json",
+      Buffer.from(JSON.stringify(data, null, 2)),
+      "application/json"
+    );
+  }
+  return removed.map((item) => ({
+    id: item.id,
+    description: item.description,
+    filename: item.filename,
+  }));
+}
+
 function getUploadsDir() {
   ensureDirs();
   return UPLOADS_DIR;
@@ -275,6 +316,7 @@ module.exports = {
   getPool,
   resolveImagePath,
   addEntry,
+  removeEntries,
   getUploadsDir,
   getEntryCount,
   prepareStorage,
