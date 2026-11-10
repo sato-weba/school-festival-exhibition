@@ -63,6 +63,7 @@ async function supabaseStorage(pathname, options = {}) {
     method: options.method || "GET",
     headers,
     body: options.body,
+    signal: AbortSignal.timeout(15000),
   });
 }
 

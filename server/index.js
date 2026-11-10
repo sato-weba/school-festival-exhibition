@@ -52,6 +52,9 @@ const upload = multer({
   },
 });
 
+let storageState = "starting";
+let storageError = "";
+
 app.get("/api/health", (_req, res) => {
   const counts = store.getEntryCount();
   res.json({
@@ -60,7 +63,8 @@ app.get("/api/health", (_req, res) => {
     counts,
     imageMatching: true,
     openaiVision: Boolean(process.env.OPENAI_API_KEY),
-    storage: store.storageMode(),
+    storage: storageState === "ready" ? store.storageMode() : storageState,
+    storageError: storageError || undefined,
   });
 });
 
@@ -80,6 +84,14 @@ app.post("/api/match", (req, res) => {
     }
 
     try {
+      if (storageState !== "ready") {
+        if (req.file) safeUnlink(req.file.path);
+        return res.status(503).json({
+          ok: false,
+          error: storageError || "保存先を準備しています。しばらくしてからもう一度送ってください。",
+        });
+      }
+
       if (!req.file) {
         return res.status(400).json({ ok: false, error: "画像を選択してください。" });
       }
@@ -153,17 +165,19 @@ function safeUnlink(filePath) {
 
 const HOST = process.env.HOST || "0.0.0.0";
 
-async function main() {
-  await store.prepareStorage();
-  const counts = store.getEntryCount();
-  app.listen(PORT, HOST, () => {
-    console.log(`ランダム画像照合アプリ listening on http://${HOST}:${PORT}`);
-    console.log(`storage: ${store.storageMode()} (${store.UPLOADS_DIR})`);
-    console.log(`pool: seeds=${counts.seeds} users=${counts.users} total=${counts.total}`);
-  });
-}
-
-main().catch((err) => {
-  console.error(err.message || err);
-  process.exit(1);
+app.listen(PORT, HOST, () => {
+  console.log(`ランダム画像照合アプリ listening on http://${HOST}:${PORT}`);
 });
+
+store.prepareStorage()
+  .then(() => {
+    storageState = "ready";
+    const counts = store.getEntryCount();
+    console.log(`storage ready: ${store.storageMode()} (${store.UPLOADS_DIR})`);
+    console.log(`pool: seeds=${counts.seeds} users=${counts.users} total=${counts.total}`);
+  })
+  .catch((err) => {
+    storageState = "error";
+    storageError = err.message || String(err);
+    console.error(storageError);
+  });
