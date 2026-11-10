@@ -25,16 +25,25 @@
 
   const LOADING_STEP_MS = 900;
 
+  const REMOTE_API_ORIGIN = "https://school-festival-exhibition.onrender.com";
+
+  function usesRemoteApi() {
+    return location.hostname.endsWith("github.io");
+  }
+
   function apiUrl(pathname) {
     const path = String(pathname || "").replace(/^\//, "");
     if (location.protocol === "file:") return `http://localhost:3000/${path}`;
+    if (usesRemoteApi()) return `${REMOTE_API_ORIGIN}/${path}`;
     return new URL(path, document.baseURI).href;
   }
 
   function resolveMediaUrl(url) {
     if (!url || url.startsWith("data:") || url.startsWith("blob:") || /^https?:/i.test(url)) return url;
     if (url.startsWith("/")) {
-      return location.protocol === "file:" ? `http://localhost:3000${url}` : url;
+      if (location.protocol === "file:") return `http://localhost:3000${url}`;
+      if (usesRemoteApi()) return `${REMOTE_API_ORIGIN}${url}`;
+      return url;
     }
     return new URL(url, document.baseURI).href;
   }
@@ -179,7 +188,7 @@
   async function serverAvailable() {
     if (serverMode === true) return true;
     try {
-      const res = await fetch(apiUrl("/api/health"), { signal: AbortSignal.timeout(8000) });
+      const res = await fetch(apiUrl("/api/health"), { signal: AbortSignal.timeout(70000) });
       const type = res.headers.get("content-type") || "";
       serverMode = res.ok && type.includes("json");
     } catch {

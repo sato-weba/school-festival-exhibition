@@ -98,13 +98,18 @@ async function uploadRemote(objectPath, body, contentType) {
   throw new Error(`投稿を保存できませんでした (${res.status}) ${text.slice(0, 180)}`);
 }
 
+function isMissingRemoteObject(status, text) {
+  if (status === 404) return true;
+  if (status !== 400) return false;
+  return /not found|NoSuchKey|NoSuchBucket|resource was not found/i.test(text);
+}
+
 async function downloadRemote(objectPath) {
   const res = await supabaseStorage(`/object/${bucketName()}/${objectPath}`);
-  if (res.status === 404) return null;
-  if (!res.ok) {
-    throw new Error(`保存済みの投稿を読み込めませんでした (${res.status})。`);
-  }
-  return Buffer.from(await res.arrayBuffer());
+  if (res.ok) return Buffer.from(await res.arrayBuffer());
+  const text = await res.text();
+  if (isMissingRemoteObject(res.status, text)) return null;
+  throw new Error(`保存済みの投稿を読み込めませんでした (${res.status}) ${text.slice(0, 180)}`);
 }
 
 function contentTypeFor(filename) {
