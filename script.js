@@ -831,23 +831,23 @@
   async function refreshPoolCount() {
     const el = document.getElementById("top-pool-count");
     if (!el) return;
+    let seeds = 17;
+    try {
+      const entries = await loadSeedCatalog();
+      if (entries.length) seeds = entries.length;
+    } catch {
+      /* 初期画像の一覧が読めないときは 17 枚のまま */
+    }
+    let users = 0;
     try {
       const res = await fetch(apiUrl("/api/health"), { signal: AbortSignal.timeout(20000) });
       const body = await res.json();
-      const total = body && body.counts ? Number(body.counts.total) : NaN;
-      if (res.ok && Number.isFinite(total)) {
-        el.textContent = String(total);
-        return;
-      }
+      const reportedUsers = body && body.counts ? Number(body.counts.users) : NaN;
+      if (res.ok && Number.isFinite(reportedUsers) && reportedUsers >= 0) users = reportedUsers;
     } catch {
-      /* 公開サーバーが休止中でも、手元の初期画像数を出す */
+      /* サーバーが休止中でも、初期の 17 枚は表示する */
     }
-    try {
-      const entries = await loadSeedCatalog();
-      el.textContent = String(entries.length);
-    } catch {
-      el.textContent = "0";
-    }
+    el.textContent = String(seeds + users);
   }
 
   function showUpload() {

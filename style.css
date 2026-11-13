@@ -598,12 +598,17 @@ body:has(#screen-top.is-active) .bg-glow {
   transform: translate(-50%, -50%) rotate(-90deg);
 }
 
+.top-green-eyes {
+  position: absolute;
+  inset: 0;
+  animation: top-green-glance 2.6s ease-in-out infinite;
+}
+
 .top-green-eye {
   position: absolute;
   top: 14.76px;
   width: 10.4698px;
   height: 12.7365px;
-  animation: top-green-glance 2.6s ease-in-out infinite;
 }
 
 .top-green-eye--left {
@@ -612,7 +617,6 @@ body:has(#screen-top.is-active) .bg-glow {
 
 .top-green-eye--right {
   left: 43.53px;
-  animation-delay: 0.12s;
 }
 
 @keyframes top-green-glance {
@@ -2522,7 +2526,7 @@ body.is-menu-open .opening-sat--blue.has-eyes .sat-eyes {
   .post-stage.is-green-open .post-sheet-pupil,
   .post-stage.is-result .post-result-eye .post-sheet-pupil,
   .post-stage.is-green-open .post-plus img,
-  .top-green-eye,
+  .top-green-eyes,
   .match-card {
     animation: none;
   }

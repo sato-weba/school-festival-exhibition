@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <div id="opening" class="opening is-spinning" aria-hidden="true">
@@ -149,11 +149,13 @@
     <!-- ① トップ -->
     <section id="screen-top" class="screen is-active" aria-label="トップ">
       <div class="top-stage">
-        <p class="top-pool">現在、<strong id="top-pool-count">0</strong>個のデータが蓄積中</p>
+        <p class="top-pool">現在、<strong id="top-pool-count">17</strong>個のデータが蓄積中</p>
         <div class="top-green" aria-hidden="true">
           <img class="top-green-body" src="images/top-green.svg" alt="" width="37" height="74">
-          <img class="top-green-eye top-green-eye--left" src="images/top-green-eye-b.svg" alt="" width="10.4698" height="12.7365">
-          <img class="top-green-eye top-green-eye--right" src="images/top-green-eye-a.svg" alt="" width="10.4698" height="12.7365">
+          <span class="top-green-eyes">
+            <img class="top-green-eye top-green-eye--left" src="images/top-green-eye-b.svg" alt="" width="10.4698" height="12.7365">
+            <img class="top-green-eye top-green-eye--right" src="images/top-green-eye-a.svg" alt="" width="10.4698" height="12.7365">
+          </span>
         </div>
         <button type="button" class="top-start" id="btn-start">
           <span class="top-start-label">START</span>
@@ -351,6 +353,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
