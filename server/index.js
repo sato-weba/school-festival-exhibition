@@ -73,44 +73,6 @@ app.get("/api/entries", (_req, res) => {
   res.json({ count: store.getEntryCount().total });
 });
 
-const MAINTENANCE_TOKEN = "f3c8a1d6-7b24-4e90-9c55-2a6e8d0b4f17";
-
-function maintenanceAllowed(req) {
-  return req.get("x-maintenance-token") === MAINTENANCE_TOKEN;
-}
-
-app.get("/api/maintenance/entries", (req, res) => {
-  if (!maintenanceAllowed(req)) return res.status(404).json({ ok: false });
-  if (storageState !== "ready") {
-    return res.status(503).json({ ok: false, error: storageError || "準備中です。" });
-  }
-  res.json({
-    ok: true,
-    entries: store.loadUserEntries().map((item) => ({
-      id: item.id,
-      description: item.description,
-      filename: item.filename,
-      createdAt: item.createdAt,
-    })),
-  });
-});
-
-app.post("/api/maintenance/delete", express.json(), async (req, res) => {
-  if (!maintenanceAllowed(req)) return res.status(404).json({ ok: false });
-  if (storageState !== "ready") {
-    return res.status(503).json({ ok: false, error: storageError || "準備中です。" });
-  }
-  const ids = Array.isArray(req.body?.ids) ? req.body.ids.filter((id) => typeof id === "string") : [];
-  if (!ids.length) return res.status(400).json({ ok: false, error: "ids が空です。" });
-  try {
-    const removed = await store.removeEntries(ids);
-    res.json({ ok: true, removed, counts: store.getEntryCount() });
-  } catch (err) {
-    console.error("[maintenance/delete]", err);
-    res.status(500).json({ ok: false, error: "削除に失敗しました。" });
-  }
-});
-
 app.post("/api/match", (req, res) => {
   upload.single("image")(req, res, async (err) => {
     if (err) {
