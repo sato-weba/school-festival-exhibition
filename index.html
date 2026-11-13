@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
   <div id="opening" class="opening is-spinning" aria-hidden="true">
@@ -149,6 +149,12 @@
     <!-- ① トップ -->
     <section id="screen-top" class="screen is-active" aria-label="トップ">
       <div class="top-stage">
+        <p class="top-pool">現在、<strong id="top-pool-count">0</strong>個のデータが蓄積中</p>
+        <div class="top-green" aria-hidden="true">
+          <img class="top-green-body" src="images/top-green.svg" alt="" width="37" height="74">
+          <img class="top-green-eye top-green-eye--left" src="images/top-green-eye-b.svg" alt="" width="10.4698" height="12.7365">
+          <img class="top-green-eye top-green-eye--right" src="images/top-green-eye-a.svg" alt="" width="10.4698" height="12.7365">
+        </div>
         <button type="button" class="top-start" id="btn-start">
           <span class="top-start-label">START</span>
           <span class="top-start-icon" aria-hidden="true">
@@ -257,24 +263,8 @@
               <circle cx="2.91428" cy="2.91428" r="2.91428" fill="#fff"/>
             </svg>
           </span>
-          <div class="post-result-main">
-            <img id="post-result-match" alt="診断で選ばれた写真" hidden>
-            <p id="post-result-caption" class="post-result-caption" hidden></p>
-            <p id="post-result-note" class="post-result-note" hidden></p>
-          </div>
-          <p id="post-result-score" class="post-result-score" hidden>
-            <svg class="post-result-score-ring" viewBox="0 0 72 72" aria-hidden="true">
-              <circle class="post-result-score-track" cx="36" cy="36" r="30"></circle>
-              <circle class="post-result-score-arc" cx="36" cy="36" r="30"></circle>
-            </svg>
-            <span class="post-result-score-copy">
-              <span class="post-result-score-label">一致度</span>
-              <span id="post-result-score-value" class="post-result-score-value">0%</span>
-            </span>
-          </p>
-          <div class="post-result-sub">
-            <img id="post-result-yours" alt="送った写真" hidden>
-          </div>
+          <div class="post-result-list" id="post-result-list"></div>
+          <p id="post-result-note" class="post-result-note" hidden></p>
         </div>
       </div>
       <div class="post-form-keep" hidden>
@@ -315,13 +305,7 @@
         <h2 class="screen-title">ランダム画像照合アプリ</h2>
         <p class="score-phrase slide-up" id="score-phrase" style="--delay: 0ms"></p>
 
-        <figure class="match-figure slide-up" style="--delay: 80ms">
-          <img id="match-image" class="match-image" alt="マッチした画像" src="">
-          <figcaption class="match-caption">
-            <span class="result-label">相手の説明</span>
-            <p class="match-description" id="match-description"></p>
-          </figcaption>
-        </figure>
+        <div class="result-list" id="result-list"></div>
 
         <div class="yours-block slide-up" style="--delay: 200ms">
           <span class="result-label">あなたの投稿</span>
@@ -367,6 +351,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=5"></script>
+  <script src="script.js?v=6"></script>
 </body>
 </html>

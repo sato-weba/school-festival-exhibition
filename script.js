@@ -221,27 +221,33 @@
     if (!scored.length) throw new Error("照合できる画像がありません。");
 
     scored.sort((a, b) => b.rank - a.rank);
-    const topRank = scored[0].rank;
-    let pick;
     let method = "image";
-    if (topRank <= 0) {
-      pick = scored[Math.floor(Math.random() * scored.length)];
+    let picks = scored.slice(0, 3);
+    if (scored[0].rank <= 0) {
+      const shuffled = scored.slice();
+      for (let i = shuffled.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const swap = shuffled[i];
+        shuffled[i] = shuffled[j];
+        shuffled[j] = swap;
+      }
+      picks = shuffled.slice(0, 3);
       method = "random";
-    } else {
-      const tops = scored.filter((item) => Math.abs(item.rank - topRank) < 1e-9);
-      pick = tops[Math.floor(Math.random() * tops.length)];
     }
+    const listed = picks.map((item) => ({
+      id: item.entry.id,
+      description: item.entry.description,
+      imageUrl: item.imageUrl,
+      isSeed: true,
+      score: Math.round(item.score * 1000) / 1000,
+    }));
 
     return {
       ok: true,
-      match: {
-        id: pick.entry.id,
-        description: pick.entry.description,
-        imageUrl: pick.imageUrl,
-        isSeed: true,
-      },
-      score: Math.round(pick.score * 1000) / 1000,
-      scorePhrase: scorePhraseFromSimilarity(pick.score, method),
+      match: listed[0],
+      matches: listed,
+      score: listed[0].score,
+      scorePhrase: scorePhraseFromSimilarity(listed[0].score, method),
       method,
       staticPool: true,
     };
@@ -819,6 +825,29 @@
   function showTop() {
     clearLoadingTimers();
     switchScreen("top");
+    refreshPoolCount();
+  }
+
+  async function refreshPoolCount() {
+    const el = document.getElementById("top-pool-count");
+    if (!el) return;
+    try {
+      const res = await fetch(apiUrl("/api/health"), { signal: AbortSignal.timeout(20000) });
+      const body = await res.json();
+      const total = body && body.counts ? Number(body.counts.total) : NaN;
+      if (res.ok && Number.isFinite(total)) {
+        el.textContent = String(total);
+        return;
+      }
+    } catch {
+      /* 公開サーバーが休止中でも、手元の初期画像数を出す */
+    }
+    try {
+      const entries = await loadSeedCatalog();
+      el.textContent = String(entries.length);
+    } catch {
+      el.textContent = "0";
+    }
   }
 
   function showUpload() {
@@ -1154,54 +1183,69 @@
     });
   }
 
+  function resultItems(payload) {
+    if (payload && Array.isArray(payload.matches) && payload.matches.length) {
+      return payload.matches.slice(0, 3);
+    }
+    if (payload && payload.match && payload.match.imageUrl) {
+      return [{
+        ...payload.match,
+        score: payload.score,
+      }];
+    }
+    return [];
+  }
+
+  function percentOf(item, method) {
+    if (method === "random") return 0;
+    const score = Number(item && item.score);
+    if (!Number.isFinite(score)) return null;
+    return Math.max(0, Math.min(100, Math.round(score * 100)));
+  }
+
+  function fillMatchList(list, items, method) {
+    if (!list) return;
+    list.replaceChildren();
+    items.forEach((item, index) => {
+      const card = document.createElement("article");
+      card.className = "match-card";
+      const image = document.createElement("img");
+      image.alt = item.description ? `${item.description}の写真` : "近い写真";
+      image.src = resolveMediaUrl(item.imageUrl);
+      const copy = document.createElement("div");
+      copy.className = "match-card-copy";
+      const score = document.createElement("p");
+      score.className = "match-card-score";
+      const percent = percentOf(item, method);
+      const label = document.createElement("span");
+      label.textContent = "一致度";
+      const value = document.createElement("strong");
+      value.textContent = percent === null ? "—" : `${percent}%`;
+      score.append(label, value);
+      const caption = document.createElement("p");
+      caption.className = "match-card-caption";
+      caption.textContent = item.description || "";
+      copy.append(score, caption);
+      card.append(image, copy);
+      card.style.setProperty("--card-delay", `${index * 90}ms`);
+      list.append(card);
+    });
+  }
+
   function revealPostResult(payload) {
     const stage = document.querySelector(".post-stage");
-    const matchImg = document.getElementById("post-result-match");
-    const yoursImg = document.getElementById("post-result-yours");
-    if (yoursImg && selectedImageDataUrl) {
-      yoursImg.src = selectedImageDataUrl;
-      yoursImg.hidden = false;
-    }
-    const matchUrl = payload && payload.match && payload.match.imageUrl;
-    const scoreEl = document.getElementById("post-result-score");
-    const scoreValue = document.getElementById("post-result-score-value");
     const note = document.getElementById("post-result-note");
-    const caption = document.getElementById("post-result-caption");
-    const matchText = payload && payload.match && payload.match.description
-      ? String(payload.match.description).trim()
-      : "";
-    if (matchImg) {
-      if (matchUrl) {
-        matchImg.src = resolveMediaUrl(matchUrl);
-        matchImg.hidden = false;
-      } else {
-        matchImg.removeAttribute("src");
-        matchImg.hidden = true;
-      }
-    }
+    const list = document.getElementById("post-result-list");
+    const items = resultItems(payload);
+    fillMatchList(list, items, payload && payload.method);
     if (note) {
-      note.hidden = Boolean(matchUrl);
-      note.textContent = matchUrl
+      note.hidden = items.length > 0;
+      note.textContent = items.length
         ? ""
         : (payload && payload.error) ||
           (location.protocol === "file:"
             ? "ファイルを直接開いているため照合できません。公開した照合サーバーのURLを使ってください。"
             : "照合できませんでした。もう一度写真を選んでください。");
-    }
-    if (caption) {
-      caption.textContent = matchUrl ? matchText : "";
-      caption.hidden = !matchUrl || !matchText;
-    }
-    if (scoreEl && scoreValue) {
-      const percent = matchPercent(payload);
-      if (matchUrl && percent !== null) {
-        scoreEl.hidden = false;
-        playScore(percent);
-      } else {
-        scoreTick += 1;
-        scoreValue.textContent = "";
-        scoreEl.hidden = true;
-      }
     }
     if (!stage) return;
     stage.classList.remove("is-diagnosing");
@@ -1506,8 +1550,7 @@
 
   function renderResult(data) {
     els.scorePhrase.textContent = data.scorePhrase || "ランダム画像照合アプリ";
-    els.matchImage.src = resolveMediaUrl(data.match.imageUrl);
-    els.matchDescription.textContent = data.match.description;
+    fillMatchList(document.getElementById("result-list"), resultItems(data), data.method);
 
     const yoursUrl = data.localPreviewUrl || resolveMediaUrl(data.yours?.imageUrl || "");
     els.yoursImage.src = yoursUrl;
@@ -1547,28 +1590,12 @@
       stage.classList.remove("is-diagnosing");
       stage.classList.remove("is-result");
     }
-    ["post-result-match", "post-result-yours"].forEach((id) => {
-      const img = document.getElementById(id);
-      if (!img) return;
-      img.removeAttribute("src");
-      img.hidden = true;
-    });
+    const list = document.getElementById("post-result-list");
+    if (list) list.replaceChildren();
     const resultNote = document.getElementById("post-result-note");
     if (resultNote) {
       resultNote.hidden = true;
       resultNote.textContent = "";
-    }
-    const resultScore = document.getElementById("post-result-score");
-    const resultScoreValue = document.getElementById("post-result-score-value");
-    const resultCaption = document.getElementById("post-result-caption");
-    scoreTick += 1;
-    if (resultScore) resultScore.hidden = true;
-    if (resultScoreValue) resultScoreValue.textContent = "";
-    const resultArc = document.querySelector(".post-result-score-arc");
-    if (resultArc) resultArc.style.strokeDashoffset = "188.5";
-    if (resultCaption) {
-      resultCaption.hidden = true;
-      resultCaption.textContent = "";
     }
     if (postGreen) postGreen.setAttribute("aria-expanded", "false");
     // 同意はセッション内で維持（毎回モーダルを出すなら hasConsented = false）

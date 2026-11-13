@@ -105,7 +105,7 @@ app.post("/api/match", (req, res) => {
 
       // 照合は画像のみ。説明文は保存・表示用でスコアに使わない。
       const pool = store.getPool();
-      const { match: best, score, method } = await match.findBestMatch(
+      const { match: best, matches, score, method } = await match.findBestMatch(
         req.file.path,
         pool,
         null
@@ -130,14 +130,18 @@ app.post("/api/match", (req, res) => {
         createdAt,
       });
 
+      const listed = (matches || []).map((item) => ({
+        id: item.entry.id,
+        description: item.entry.description,
+        imageUrl: item.entry.imageUrl,
+        isSeed: Boolean(item.entry.isSeed),
+        score: Math.round(item.score * 1000) / 1000,
+      }));
+
       return res.json({
         ok: true,
-        match: {
-          id: best.id,
-          description: best.description,
-          imageUrl: best.imageUrl,
-          isSeed: Boolean(best.isSeed),
-        },
+        match: listed[0],
+        matches: listed,
         score: Math.round(score * 1000) / 1000,
         scorePhrase: match.scorePhrase(score, method),
         method,

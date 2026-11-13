@@ -294,18 +294,44 @@ async function fetchImageEmbedding(imagePath) {
 }
 
 /**
- * プールから画像関連度がいちばん高い1件を返す（同点ならランダム）
- * 説明文は参照しない。
+ * 関連度の高い順に最大3件返す。すべて0点のときは無作為に3件。
+ * @param {Array<object>} scored
+ * @param {Array<object>} candidates
+ * @returns {{ picks: Array<{ entry: object, score: number }>, methodOverride: string|null }}
+ */
+function takeTopMatches(scored, candidates) {
+  const limit = 3;
+  const rankOf = (item) => (typeof item.rank === "number" ? item.rank : item.score);
+  scored.sort((a, b) => rankOf(b) - rankOf(a));
+  if (!scored.length || rankOf(scored[0]) <= 0) {
+    const shuffled = candidates.slice();
+    for (let i = shuffled.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const swap = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = swap;
+    }
+    return {
+      methodOverride: "random",
+      picks: shuffled.slice(0, limit).map((entry) => ({ entry, score: 0 })),
+    };
+  }
+  return { methodOverride: null, picks: scored.slice(0, limit) };
+}
+
+/**
+ * プールから画像関連度の高い最大3件を返す。
+ * 説明文は参照しない。match と score は1位。
  *
  * @param {string} queryImagePath 投稿画像の絶対パス
  * @param {Array<object>} pool imagePath を持つエントリ配列
  * @param {string|null} excludeId
- * @returns {Promise<{ match: object|null, score: number, method: string }>}
+ * @returns {Promise<{ match: object|null, matches: Array<object>, score: number, method: string }>}
  */
 async function findBestMatch(queryImagePath, pool, excludeId = null) {
   const candidates = pool.filter((e) => e.id !== excludeId && e.imagePath);
   if (candidates.length === 0) {
-    return { match: null, score: 0, method: "none" };
+    return { match: null, matches: [], score: 0, method: "none" };
   }
 
   let method = "image";
@@ -340,18 +366,15 @@ async function findBestMatch(queryImagePath, pool, excludeId = null) {
     }
   }
 
-  const rankOf = (item) => (typeof item.rank === "number" ? item.rank : item.score);
-  scored.sort((a, b) => rankOf(b) - rankOf(a));
-  const topRank = rankOf(scored[0]);
-
-  if (topRank <= 0) {
-    const pick = candidates[Math.floor(Math.random() * candidates.length)];
-    return { match: pick, score: 0, method: "random" };
-  }
-
-  const tops = scored.filter((s) => Math.abs(rankOf(s) - topRank) < 1e-9);
-  const pick = tops[Math.floor(Math.random() * tops.length)];
-  return { match: pick.entry, score: pick.score, method };
+  const { picks, methodOverride } = takeTopMatches(scored, candidates);
+  if (methodOverride) method = methodOverride;
+  const best = picks[0];
+  return {
+    match: best ? best.entry : null,
+    matches: picks,
+    score: best ? best.score : 0,
+    method,
+  };
 }
 
 /**
